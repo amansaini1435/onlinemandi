@@ -51,7 +51,7 @@
                     </RouterLink>
                 </li>
                 <li class="nav-item border-bottom border-1 py-3 px-2">
-                    <RouterLink to="/seller"
+                    <RouterLink to=""
                         class=" text-primary fs-20 nav-link d-flex justify-content-start align-items-center "><i
                             class="bi bi-table fs-3 text-primary ms-1"></i> <span
                             class="fw-bold ms-4 text-primary">Sellers</span>

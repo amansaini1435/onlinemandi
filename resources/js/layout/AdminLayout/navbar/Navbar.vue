@@ -41,18 +41,20 @@ export default {
                         <input class=" rounded-pill form-control  py-2 px-3 w-100 d-inline-block  me-2" type="search"
                             placeholder="Search" aria-label="Search">
                     </form>
-
+                 
                     <div class="nev_profile d-flex  justify-content-between align-items-center">
-                        
                         <div class="profile_pic me-5">
                             <img src="../../../../assets//images/Sa.jpg" class="h-100 w-100 object-fit-cover " alt="">
                         </div>
+
                         <div class="nav_notify rounded-0 me-5 d-flex justify-content-center ">
                             <i class="bi bi-bell fs-3"></i>
                         </div>
 
+
                         <div class="new_add_nav">
-                            <button type="button" @click="logout" class="py-2 px-4 fs-18 btn-success  border-0 rounded-pill"> 
+                            <button type="button" @click="logout"
+                                class="py-2 px-4 fs-18 btn-success  border-0 rounded-pill">
                                 Log out
                             </button>
                             <form action="/logout" method="POST" id="logout">
@@ -190,5 +192,4 @@ function opensidenev() {
         margin-bottom: 15px;
     }
 }
-
 </style>

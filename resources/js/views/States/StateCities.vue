@@ -11,8 +11,8 @@
                     <h3 class="text-primary fw-bold">{{ state.stateData.name }} | Cities</h3>
                     <div class="d-flex">
                         <form class="position-relative">
-                            <input class="form-control me-2 py-2 shadow-none" type="search" placeholder="Search"
-                                aria-label="Search">
+                            <input class="form-control me-2 shadow-none" type="search" v-model="searchQuery"
+                                placeholder="Search" aria-label="Search">
                             <button class="btn position-absolute top-0 end-0 shadow-none" type="submit"> <i
                                     class="bi bi-search"></i></button>
                         </form>
@@ -29,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in state.stateData.cities" class="align-middle">
+                        <tr v-for="(item, index) in filteredState" class="align-middle">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.name }}</td>
                             <td>
@@ -50,12 +50,12 @@
 
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                                         
-                                        <li><a class="dropdown-item"
+                                        <!-- <li><a class="dropdown-item"
                                                 href="{{ route('admin.state.delete', ['id' => $record->getId()])}}">Delete</a>
                                         </li>
                                         <li><a class="dropdown-item"
                                                 href="{{ route('admin.state.delete', ['id' => $record->getId()])}}">Edit</a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </td>
@@ -67,16 +67,15 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watchEffect, reactive } from 'vue'
+import { ref, onMounted, watchEffect, reactive,computed } from 'vue'
 import { withAsync } from "../../api/helpers/withAsync"
 import { fetchCities ,updateStatus} from "../../api/locationApi"
 import { useStore } from '../../stores/main'
 import { useRoute } from 'vue-router'
-
+const searchQuery = ref('');
 const route = useRoute()
 const store = useStore()
 const state = reactive({
-    showModalNow: false,
     stateData: null,
     fullPage: true,
     useSlot: false
@@ -94,10 +93,12 @@ async function fetchCitiesData() {
     store.loading(false);
     return;
 }
+const filteredState = computed(() => {
+    return state.stateData.cities.filter((cities) => {
+        return cities.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    })
+})
 
-function closeMyModal() {
-    state.showModalNow = false;
-}
 
 watchEffect(async () => {
     await fetchCitiesData();

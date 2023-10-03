@@ -6,12 +6,11 @@
                     <h3 class="m-0">Products</h3>
                     <div class="d-flex">
                         <form class="position-relative">
-                            <input class="form-control me-2 shadow-none" type="search" placeholder="Search"
-                                aria-label="Search">
+                            <input class="form-control me-2 shadow-none" type="search" v-model="searchQuery"
+                                placeholder="Search" aria-label="Search">
                             <button class="btn position-absolute top-0 end-0 shadow-none" type="submit"> <i
                                     class="bi bi-search"></i></button>
-                        </form>
-                        <Create @on-success="fetchProducts"></Create>
+                        </form> 
                     </div>
                 </div>
                 <table class="table">
@@ -30,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in data.products" class="align-middle">
+                        <tr v-for="(item, index) in filteredProducts" class="align-middle">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.code }}</td>
                             <td>{{ item.name }}</td>
@@ -79,12 +78,12 @@
     </div>
 </template>
 <script setup>
-import { onMounted, watchEffect, reactive } from 'vue'
+import { onMounted, watchEffect, reactive,ref,computed } from 'vue'
 import { withAsync } from "../../api/helpers/withAsync"
 import { fetchProducts, updateStatus } from "../../api/productApi.js"
-import Create from './create.vue'
 import { useStore } from '../../stores/main'
 import { useRouter } from 'vue-router'
+const searchQuery = ref('');
 const store = useStore()
 const router = useRouter()
 const data = reactive({
@@ -106,6 +105,11 @@ async function fetchRecords() {
     data.products = response.data.products;
     store.loading(false);
 }
+const filteredProducts = computed(() => {
+    return data.products.filter((data) => {
+        return data.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    })
+})
 
 function closeMyModal() {
     data.showModalNow = false;

@@ -16,7 +16,6 @@
                             <button class="btn position-absolute top-0 end-0 shadow-none" type="submit"> <i
                                     class="bi bi-search"></i></button>
                         </form>
-
                     </div>
                 </div>
                 <div>
@@ -31,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in  state.states" class="align-middle">
+                        <tr v-for="(item, index) in  filteredState" class="align-middle">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.name }}</td>
                             <td>
@@ -80,18 +79,15 @@
 }
 </style>
 <script setup>
-import { ref, onMounted, onBeforeMount, watchEffect, reactive, onBeforeUpdate, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeMount, watchEffect, reactive, computed } from 'vue'
 import { withAsync } from "../../api/helpers/withAsync"
 import { fetchStates, deleteState, updateStatus } from "../../api/locationApi"
 import { useStore } from '../../stores/main'
 import { useRouter } from 'vue-router'
-
-
-
+const searchQuery = ref('');
 const store = useStore()
 const router = useRouter()
 const state = reactive({
-    showModalNow: false,
     items: null,
     fullPage: true,
     useSlot: false,
@@ -110,10 +106,11 @@ async function fetchState() {
     state.states = response.data.states;
     store.loading(false);
 }
-
-function closeMyModal() {
-    state.showModalNow = false;
-}
+const filteredState = computed(() => {
+    return state.states.filter((state) => {
+        return state.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    })
+})
 
 watchEffect(async () => {
     await fetchState();

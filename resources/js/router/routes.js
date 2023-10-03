@@ -6,7 +6,6 @@ import Settings from "../views/Settings/index.vue";
 import States from "../views/States/index.vue";
 import Products from "../views/Products/index.vue";
 import StateCities from '../views/States/StateCities.vue'
-import Seller from '../views/Seller/index.vue'
 import edit from '../views/Users/edit.vue'
 
 const router = createRouter({
@@ -22,9 +21,10 @@ const router = createRouter({
             name: "users",
             component: Users,
         },
+       
         {
-            path: "/users/userDetails",
-            name: "userDetails",
+            path: "/user/show/:id",
+            name: "userDetail",
             component: userDetails,
         },
         {
@@ -52,11 +52,6 @@ const router = createRouter({
             path: "/products",
             name: "product",
             component: Products,
-        },
-        {
-            path: "/seller",
-            name: "seller",
-            component: Seller,
         },
        
     ],

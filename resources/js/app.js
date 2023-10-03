@@ -1,7 +1,8 @@
-
 import './bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
 import '../assets/css/style.css'
+
 import '../css/app.css';
 import {createApp} from 'vue/dist/vue.esm-bundler'
 import { createPinia } from 'pinia'

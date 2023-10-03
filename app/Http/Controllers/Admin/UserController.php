@@ -15,7 +15,7 @@ class UserController extends Controller
             'items' => $items
         ]);
     }
-    
+
 
     public function store(Request $request)
     {
@@ -26,13 +26,13 @@ class UserController extends Controller
         ]);
         $creationData = $request->only(["name", "email"]);
         $creationData["status"] = $request->input('status');
-       User::create($creationData);
+        User::create($creationData);
         return response()->json([
             "res" => "Success"
         ]);
     }
-    
-    
+
+
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -55,7 +55,7 @@ class UserController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $item = User::find( $request->id);
+        $item = User::find($request->id);
         $item->status = !$item->status;
         $item->save();
         return response()->json([
@@ -63,6 +63,25 @@ class UserController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $record = User::find($id);
+        return response()->json([
+            'user' => $record
+        ]);
+
+        return response()->json([
+            "res" => "success"
+        ]);
+    }
+
+    public function getDetails($id)
+    {
+        $item = User::find($id);
+        return response()->json([
+            'items' => $item
+        ]);
+    }
 
     public function destroy(string $id)
     {
@@ -72,5 +91,4 @@ class UserController extends Controller
             "res" => "Success"
         ]);
     }
-    
 }

@@ -27,6 +27,11 @@ class ProductController extends Controller
         //
     }
 
+    public function getAll()
+    {
+        $products =Product::get()->toJson(JSON_PRETTY_PRINT);
+        return response($products, 200);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -54,6 +59,16 @@ class ProductController extends Controller
         ]);
     }
    
+    public function getProduct($id) {
+        if (Product::where('id', $id)->exists()) {
+            $product = Product::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($product, 200);
+          } else {
+            return response()->json([
+              "message" => "Product not found"
+            ], 404);
+          }
+      }
   
     /**
      * Display the specified resource.

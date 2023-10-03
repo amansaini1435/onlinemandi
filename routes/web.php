@@ -27,35 +27,46 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-require __DIR__.'/auth.php';
-Route::middleware('auth')->group(function() {
-    Route::get('/', function () { return view('app'); })->name('AdminLayout'); 
-    if (request()->expectsJson()) { 
+require __DIR__ . '/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('app');
+    })->name('AdminLayout');
+    if (request()->expectsJson()) {
         Route::put('users/update-status', [UserController::class, 'updateStatus']);
-    Route::resource('/users',UserController::class);
-    Route::resource('/settings',SettingController::class);
-    Route::resource('/cities',CityController::class);
-    Route::put('states/update-status', [StateController::class, 'updateStatus']);
-    Route::post('states/add-city', [StateController::class, 'addCity']);
-    Route::resource('/states',StateController::class);
-    Route::resource('/unit',UnitController::class);
-    Route::resource('/sub-category',SubCategoryController::class);
-    Route::resource('/category',CategoryController::class);
-    Route::put('products/update-status', [ProductController::class, 'updateStatus']);
-    Route::resource('/products',ProductController::class);
-    Route::resource('/seller',SellerController::class);
-    Route::fallback(function () { return redirect('/'); });
-
-    }else {
-        Route::fallback(function () {return view('app');  });
+        Route::get('users/{id}', [UserController::class,'show']);
+        Route::get('users/{id}',[UserController::class,'getDetails']);
+        Route::resource('/users', UserController::class);
+        Route::resource('/settings', SettingController::class);
+        Route::resource('/cities', CityController::class);
+        Route::put('states/update-status', [StateController::class, 'updateStatus']);
+        Route::post('states/add-city', [StateController::class, 'addCity']);
+        Route::resource('/states', StateController::class);
+        Route::resource('/unit', UnitController::class);
+        Route::resource('/sub-category', SubCategoryController::class);
+        Route::resource('/category', CategoryController::class);
+        Route::put('products/update-status', [ProductController::class, 'updateStatus']);
+        Route::resource('/products', ProductController::class);
+        Route::resource('/seller', SellerController::class);
+        Route::fallback(function () {
+            return redirect('/');
+        });
+    } else {
+        Route::fallback(function () {
+            return view('app');
+        });
     }
-    
+});
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/profile/edit', [UserProfileController::class, 'edit'])->name('user_profile.edit');
+    Route::patch('/user/profile/update', [UserProfileController::class, 'update'])->name('user_profile.update');
 });
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -63,4 +74,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
